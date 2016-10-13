@@ -17,9 +17,8 @@ public class SemiCompiler {
     public static void main(String[] args) {
         // TODO code application logic here
         System.out.println("TEST INITIAL COMMIT 2");
-        System.out.println("INITIAL COMMIT - JLKHO");
-        System.out.println("TEST COMMIT");
-
+        System.out.println("TEST INITIAL COMMIT 2");
+        System.out.println("TEST COMMIT COMMIT 3");
         
     }
     
