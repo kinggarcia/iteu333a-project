@@ -19,7 +19,7 @@ public class SemiCompiler {
         System.out.println("TEST INITIAL COMMIT 2");
         System.out.println("TEST INITIAL COMMIT 2");
         System.out.println("TEST COMMIT COMMIT 3 NEWEST");
-        
+        //test
     }
     
 }
