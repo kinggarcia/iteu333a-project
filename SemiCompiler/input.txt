@@ -2,8 +2,11 @@ public class Test {
     public static void main(String[] args){
         int i = 0;
 		kung(i==1){
-			System.labas.iprint("kumusta mundo"); System.labas.iprint("kumusta mundo");
+			System.labas.iprint("ku1musta mundo");
+                        System.labas.iprint(a1a+e);
+                        System.labas.iprint(a1a+e+"hi");
 			System.labas.iprint("System.labas.iprint");
+                        MakeSukat(aA1A+e);
 		}
 	}
 }

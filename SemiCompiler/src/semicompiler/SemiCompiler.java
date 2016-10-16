@@ -29,24 +29,52 @@ public class SemiCompiler {
 
         //reads the file "input.txt"
         PrintWriter writer = new PrintWriter("Test.java", "UTF-8");
-
+        int parctr = 0, bractr = 0;
+        
         while (sc.hasNext()) {
             String str = sc.nextLine();
-            //replaces kung with if
-            str = str.replaceAll("kung", "if");
             
-            String digitpattern = "(System.labas.iprint\\(\".*\"\\))";
-            Pattern digit = Pattern.compile(digitpattern);
-            Matcher digitmatcher = digit.matcher(str);
-            if(digitmatcher.find()){
-                str = str.replaceFirst("System.labas.iprint", "System.out.println");
+            if(str.contains("(")){
+                parctr++;
             }
-
-//            str = str.replaceAll("(System.labas.iprint\\(\"[a-z]*\"\\))", "System.out.println\\(\"[a-z]*\"\\)");
-            //System.out.println("");
+            if(str.contains(")")){
+                parctr--;
+            }
+            if(str.contains("{")){
+                bractr++;
+            }
+            if(str.contains("}")){
+                bractr--;
+            }
+            
+            String soutpattern = "(System.labas.iprint\\(.*\\);)";
+            Pattern sout = Pattern.compile(soutpattern);
+            Matcher soutmatcher = sout.matcher(str);
+            if(soutmatcher.find()){
+                String hold = soutmatcher.group(0).substring(19);
+                str = str.replaceAll("System.labas.iprint\\(.*\\);", "System.out.println"+hold);
+            }
+            
+            String lengthpattern = "(MakeSukat\\(.*\\);)";
+            Pattern length = Pattern.compile(lengthpattern);
+            Matcher lengthmatcher = length.matcher(str);
+            if(lengthmatcher.find()){
+                String hold = lengthmatcher.group(0).substring(9);
+                System.out.println("hold = " + hold);
+                String solvelengthpattern = "([a-z0-9A-Z]*[+][a-z0-9A-Z]*)";
+                Pattern solvelength = Pattern.compile(solvelengthpattern);
+                Matcher solvelengthmatcher = solvelength.matcher(hold);
+                    if(solvelengthmatcher.find()){
+                        String[] holdarr = solvelengthmatcher.group(0).split("[+]");
+                        str = str.replaceAll("MakeSukat\\(.*\\);", "System.out.println(" + holdarr[0] + ".length()+" + holdarr[1] + ".length());");
+                    }
+            }
+            
             writer.println(str);
         }
         
+        if(parctr == 0 && bractr == 0){
+            
         writer.close();
         List cmdAndArgs = Arrays.asList("cmd", "/c", "run.bat");
         File dir = new File(System.getProperty("user.dir"));
@@ -54,6 +82,8 @@ public class SemiCompiler {
         ProcessBuilder pb = new ProcessBuilder(cmdAndArgs);
         pb.directory(dir);
         Process p = pb.start();
+        
+        }
     }
     
 }
