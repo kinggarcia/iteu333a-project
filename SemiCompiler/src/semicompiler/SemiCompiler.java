@@ -30,6 +30,7 @@ public class SemiCompiler {
         //reads the file "input.txt"
         PrintWriter writer = new PrintWriter("Test.java", "UTF-8");
         int parctr = 0, bractr = 0;
+        boolean error = false;
         
         while (sc.hasNext()) {
             String str = sc.nextLine();
@@ -47,12 +48,27 @@ public class SemiCompiler {
                 bractr--;
             }
             
+            String checksoutpattern = "(^System.labas.iprint\\(*.*\\)*)";
+            Pattern checksout = Pattern.compile(checksoutpattern);
+            Matcher checksoutmatcher = checksout.matcher(str);
+            if(checksoutmatcher.find()){
+                error = true;
+                break;
+            }
+            
             String soutpattern = "(System.labas.iprint\\(.*\\);)";
             Pattern sout = Pattern.compile(soutpattern);
             Matcher soutmatcher = sout.matcher(str);
             if(soutmatcher.find()){
                 String hold = soutmatcher.group(0).substring(19);
                 str = str.replaceAll("System.labas.iprint\\(.*\\);", "System.out.println"+hold);
+            }
+            
+            String commentpattern = "(////.*)";
+            Pattern comment = Pattern.compile(commentpattern);
+            Matcher commentmatcher = comment.matcher(str);
+            if(checksoutmatcher.find()){
+                continue;
             }
             
             String lengthpattern = "(MakeSukat\\(.*\\);)";
@@ -73,7 +89,7 @@ public class SemiCompiler {
             writer.println(str);
         }
         
-        if(parctr == 0 && bractr == 0){
+        if(parctr == 0 && bractr == 0 && !error){
             
         writer.close();
         List cmdAndArgs = Arrays.asList("cmd", "/c", "run.bat");
@@ -83,6 +99,8 @@ public class SemiCompiler {
         pb.directory(dir);
         Process p = pb.start();
         
+        }else{
+            System.out.println("ERROR");
         }
     }
     

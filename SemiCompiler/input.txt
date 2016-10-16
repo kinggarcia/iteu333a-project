@@ -3,6 +3,8 @@ public class Test {
         int i = 0;
 		kung(i==1){
 			System.labas.iprint("ku1musta mundo");
+//System.labas.iprint(ku1musta mundo")
+System.labas.iprint(ku1musta mundo")
                         System.labas.iprint(a1a+e);
                         System.labas.iprint(a1a+e+"hi");
 			System.labas.iprint("System.labas.iprint");
