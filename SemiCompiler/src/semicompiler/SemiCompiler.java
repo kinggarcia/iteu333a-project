@@ -39,6 +39,7 @@ public class SemiCompiler {
             Space(str);
             DatatypeInt(str);
             DatatypeChar(str);
+            DatatypeString(str);
             Semicolon(str);
             
             if(str.contains("(")){
@@ -145,10 +146,17 @@ public class SemiCompiler {
         int i=0, j = r.length();
         for(int a = 0;a<j;a++)
         {
-            if(r.matches(r)){
-                System.out.println("int detected");
-                i=1;
-            }
+            if(r.charAt(a)=='i')
+            {
+                if(r.charAt(a+1)=='n')
+                {
+                    if(r.charAt(a+2)=='t')
+                    {
+                        System.out.println("int detected");
+                        i=1;
+                    }
+                }
+            }   
         }
         return i;
     }
@@ -156,23 +164,49 @@ public class SemiCompiler {
         int c=0, j=r.length();
         for(int a=0; a<j; a++)
         {
-            if(r.matches("char")){
-                System.out.println("char detected");
-                c=1;
+            if(r.charAt(a)=='c')
+            {
+                if(r.charAt(a+1)=='h')
+                {
+                    if(r.charAt(a+2)=='a')
+                    {
+                        if(r.charAt(a+3)=='r')
+                        {
+                            System.out.println("char detected");
+                            c=1;
+                        }
+                    }
+                }
             }    
         }
         return c;
     }
-    static int DatatypeBool(String l){
+    static int DatatypeString(String l){
         int b=0, j=l.length();
-////        for(int a=0; a<j; a++)
-////        {
-            if(l.matches("boolean")){
-                System.out.println("boolean detected");
-                b=1;
-            }
-                
-        //}
+        for(int a=0; a<j; a++)
+        {
+            //if(l.matches())
+            if(l.charAt(a)=='s')
+            {
+                if(l.charAt(a+1)=='t')
+                {
+                    if(l.charAt(a+2)=='r')
+                    {
+                        if(l.charAt(a+3)=='i')
+                        {
+                            if(l.charAt(a+4)=='n')
+                            {
+                                if(l.charAt(a+5)=='g')
+                                {
+                                    System.out.println("string detected");
+                                    b=1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }    
+        }
         return b;
     }
     
