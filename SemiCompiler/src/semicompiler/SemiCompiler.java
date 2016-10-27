@@ -71,6 +71,14 @@ public class SemiCompiler {
                 continue;
             }
             
+            String checklengthpattern = "(^MakeSukat\\(*.*\\)*)";
+            Pattern checklength = Pattern.compile(checklengthpattern);
+            Matcher checklengthmatcher = checklength.matcher(str);
+            if(checklengthmatcher.find()){
+                error = true;
+                break;
+            }
+            
             String lengthpattern = "(MakeSukat\\(.*\\);)";
             Pattern length = Pattern.compile(lengthpattern);
             Matcher lengthmatcher = length.matcher(str);
