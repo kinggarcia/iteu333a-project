@@ -26,20 +26,22 @@ public class SemiCompiler {
 
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
         Scanner sc = new Scanner(new FileReader("input.txt"));
+        
+        Scanner scan = new Scanner(new FileReader("input.txt"));
 
         //reads the file "input.txt"
         PrintWriter writer = new PrintWriter("Test.java", "UTF-8");
-        int parctr = 0, bractr = 0;
-        boolean error = false;
+        int parctr = 0, bractr = 0, lineerror = 0;
+        boolean error = false, nohanging = false;
         
         while (sc.hasNext()) {
             String str = sc.nextLine();
             
             if(str.contains("(")){
                 parctr++;
-            }
-            if(str.contains(")")){
-                parctr--;
+                if(str.contains(")")){
+                    parctr--;
+                }
             }
             if(str.contains("{")){
                 bractr++;
@@ -47,8 +49,17 @@ public class SemiCompiler {
             if(str.contains("}")){
                 bractr--;
             }
-            
-            String checksoutpattern = "(^System.labas.iprint\\(*.*\\)*)";
+        }
+        
+        if(parctr == 0 && bractr == 0){
+                nohanging = true;
+            }
+        
+        if(nohanging){
+//            System.out.println(parctr + " " + bractr);
+        while (scan.hasNext()) {
+            String str = scan.nextLine();
+            String checksoutpattern = "^System.labas.iprint\\(*\\)*";
             Pattern checksout = Pattern.compile(checksoutpattern);
             Matcher checksoutmatcher = checksout.matcher(str);
             if(checksoutmatcher.find()){
@@ -64,19 +75,11 @@ public class SemiCompiler {
                 str = str.replaceAll("System.labas.iprint\\(.*\\);", "System.out.println"+hold);
             }
             
-            String commentpattern = "(////.*)";
-            Pattern comment = Pattern.compile(commentpattern);
-            Matcher commentmatcher = comment.matcher(str);
-            if(checksoutmatcher.find()){
-                continue;
-            }
-            
             String lengthpattern = "(MakeSukat\\(.*\\);)";
             Pattern length = Pattern.compile(lengthpattern);
             Matcher lengthmatcher = length.matcher(str);
             if(lengthmatcher.find()){
                 String hold = lengthmatcher.group(0).substring(9);
-                System.out.println("hold = " + hold);
                 String solvelengthpattern = "([a-z0-9A-Z]*[+][a-z0-9A-Z]*)";
                 Pattern solvelength = Pattern.compile(solvelengthpattern);
                 Matcher solvelengthmatcher = solvelength.matcher(hold);
@@ -86,7 +89,16 @@ public class SemiCompiler {
                     }
             }
             
+            String commentpattern = "(////.*)";
+            Pattern comment = Pattern.compile(commentpattern);
+            Matcher commentmatcher = comment.matcher(str);
+            if(commentmatcher.find()){
+                continue;
+            }
+            
             writer.println(str);
+            lineerror++;
+        }
         }
         
         if(parctr == 0 && bractr == 0 && !error){
@@ -100,7 +112,12 @@ public class SemiCompiler {
         Process p = pb.start();
         
         }else{
-            System.out.println("ERROR");
+            if(parctr > 0)
+                System.out.println("ERROR Hanging Parenthesis");
+            else if(bractr > 0)
+                System.out.println("ERROR Hanging Bracket");
+            else
+                System.out.println("ERROR at " + lineerror);
         }
     }
     
