@@ -31,16 +31,16 @@ public class SemiCompiler {
 
         //reads the file "input.txt"
         PrintWriter writer = new PrintWriter("Test.java", "UTF-8");
-        int parctr = 0, bractr = 0, lineerror = 0;
+        int parctr = 0, bractr = 0, lineerror = 1;
         boolean error = false, nohanging = false;
         
         while (sc.hasNext()) {
             String str = sc.nextLine();
-//            Space(str);
-//            DatatypeInt(str);
-//            DatatypeChar(str);
-//            DatatypeString(str);
-//            Semicolon(str);
+//                Space(str);
+//                DatatypeInt(str);
+//                DatatypeChar(str);
+//                DatatypeString(str);
+//                Semicolon(str);
             
             if(str.contains("(")){
                 parctr++;
@@ -64,13 +64,13 @@ public class SemiCompiler {
 //            System.out.println(parctr + " " + bractr);
         while (scan.hasNext()) {
             String str = scan.nextLine();
-            String checksoutpattern = "^System.labas.iprint\\(*\\)*";
-            Pattern checksout = Pattern.compile(checksoutpattern);
-            Matcher checksoutmatcher = checksout.matcher(str);
-            if(checksoutmatcher.find()){
-                error = true;
-                break;
-            }
+//            String checksoutpattern = "^System.labas.iprint\\(*\\)*";
+//            Pattern checksout = Pattern.compile(checksoutpattern);
+//            Matcher checksoutmatcher = checksout.matcher(str);
+//            if(checksoutmatcher.find()){
+//                error = true;
+//                break;
+//            }
             
             String soutpattern = "(System.labas.iprint\\(.*\\);)";
             Pattern sout = Pattern.compile(soutpattern);
@@ -78,22 +78,23 @@ public class SemiCompiler {
             if(soutmatcher.find()){
                 String hold = soutmatcher.group(0).substring(19);
                 str = str.replaceAll("System.labas.iprint\\(.*\\);", "System.out.println"+hold);
+                writer.println(str);
             }
             
             String commentpattern = "(////.*)";
             Pattern comment = Pattern.compile(commentpattern);
             Matcher commentmatcher = comment.matcher(str);
-            if(checksoutmatcher.find()){
+            if(commentmatcher.find()){
                 continue;
             }
             
-            String checklengthpattern = "(^MakeSukat\\(*.*\\)*)";
-            Pattern checklength = Pattern.compile(checklengthpattern);
-            Matcher checklengthmatcher = checklength.matcher(str);
-            if(checklengthmatcher.find()){
-                error = true;
-                break;
-            }
+//            String checklengthpattern = "(^MakeSukat\\(*.*\\)*)";
+//            Pattern checklength = Pattern.compile(checklengthpattern);
+//            Matcher checklengthmatcher = checklength.matcher(str);
+//            if(checklengthmatcher.find()){
+//                error = true;
+//                break;
+//            }
             
             String lengthpattern = "(MakeSukat\\(.*\\);)";
             Pattern length = Pattern.compile(lengthpattern);
@@ -106,10 +107,20 @@ public class SemiCompiler {
                     if(solvelengthmatcher.find()){
                         String[] holdarr = solvelengthmatcher.group(0).split("[+]");
                         str = str.replaceAll("MakeSukat\\(.*\\);", "System.out.println(" + holdarr[0] + ".length()+" + holdarr[1] + ".length());");
+                        writer.println(str);
                     }
             }
             
-            writer.println(str);
+            String mdaspattern = "(MakeKompyut\\(.*\\);)";
+            Pattern mdas = Pattern.compile(mdaspattern);
+            Matcher mdasmatcher = mdas.matcher(str);
+            if(mdasmatcher.find()){
+                String hold = mdasmatcher.group(0).substring(11);
+                str = str.replaceAll("MakeKompyut\\(.*\\);", "System.out.println" + hold);
+                writer.println(str);
+//                System.out.println((8+2+3)/13);
+            }
+            
             lineerror++;
         }
         }
@@ -130,7 +141,7 @@ public class SemiCompiler {
             else if(bractr > 0)
                 System.out.println("ERROR Hanging Bracket");
             else
-                System.out.println("ERROR at " + lineerror);
+                System.out.println("ERROR at Line " + lineerror);
         }
     }
     static int Space(String x){

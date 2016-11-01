@@ -1,1 +1,5 @@
-int i
+System.labas.iprint("h");
+System.labas.iprint(a+b);
+MakeSukat(a+b);
+MakeKompyut(a+b);
+//System.labas.iprint("h")
