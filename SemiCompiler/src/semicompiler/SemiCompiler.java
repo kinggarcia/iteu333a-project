@@ -26,20 +26,27 @@ public class SemiCompiler {
 
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
         Scanner sc = new Scanner(new FileReader("input.txt"));
+        
+        Scanner scan = new Scanner(new FileReader("input.txt"));
 
         //reads the file "input.txt"
         PrintWriter writer = new PrintWriter("Test.java", "UTF-8");
-        int parctr = 0, bractr = 0;
-        boolean error = false;
+        int parctr = 0, bractr = 0, lineerror = 0;
+        boolean error = false, nohanging = false;
         
         while (sc.hasNext()) {
             String str = sc.nextLine();
+//            Space(str);
+//            DatatypeInt(str);
+//            DatatypeChar(str);
+//            DatatypeString(str);
+//            Semicolon(str);
             
             if(str.contains("(")){
                 parctr++;
-            }
-            if(str.contains(")")){
-                parctr--;
+                if(str.contains(")")){
+                    parctr--;
+                }
             }
             if(str.contains("{")){
                 bractr++;
@@ -47,8 +54,17 @@ public class SemiCompiler {
             if(str.contains("}")){
                 bractr--;
             }
-            
-            String checksoutpattern = "(^System.labas.iprint\\(*.*\\)*)";
+        }
+        
+        if(parctr == 0 && bractr == 0){
+                nohanging = true;
+            }
+        
+        if(nohanging){
+//            System.out.println(parctr + " " + bractr);
+        while (scan.hasNext()) {
+            String str = scan.nextLine();
+            String checksoutpattern = "^System.labas.iprint\\(*\\)*";
             Pattern checksout = Pattern.compile(checksoutpattern);
             Matcher checksoutmatcher = checksout.matcher(str);
             if(checksoutmatcher.find()){
@@ -84,7 +100,6 @@ public class SemiCompiler {
             Matcher lengthmatcher = length.matcher(str);
             if(lengthmatcher.find()){
                 String hold = lengthmatcher.group(0).substring(9);
-                System.out.println("hold = " + hold);
                 String solvelengthpattern = "([a-z0-9A-Z]*[+][a-z0-9A-Z]*)";
                 Pattern solvelength = Pattern.compile(solvelengthpattern);
                 Matcher solvelengthmatcher = solvelength.matcher(hold);
@@ -95,6 +110,8 @@ public class SemiCompiler {
             }
             
             writer.println(str);
+            lineerror++;
+        }
         }
         
         if(parctr == 0 && bractr == 0 && !error){
@@ -108,8 +125,116 @@ public class SemiCompiler {
         Process p = pb.start();
         
         }else{
-            System.out.println("ERROR");
+            if(parctr > 0)
+                System.out.println("ERROR Hanging Parenthesis");
+            else if(bractr > 0)
+                System.out.println("ERROR Hanging Bracket");
+            else
+                System.out.println("ERROR at " + lineerror);
         }
     }
+    static int Space(String x){
+        int i=0, j = x.length();
+        for(int a = 0;a<j;a++)
+        {
+            if(x.charAt(a)==' ')
+            {
+                if(x.charAt(a+1)==' ')
+                {
+                    System.out.println("White space detected");
+                    i=1;
+                }
+            }
+            
+        }
+        return i;
+    }
     
+    static int DatatypeInt(String r){
+        int i=0, j = r.length();
+        for(int a = 0;a<j;a++)
+        {
+            if(r.charAt(a)=='i')
+            {
+                if(r.charAt(a+1)=='n')
+                {
+                    if(r.charAt(a+2)=='t')
+                    {
+                        System.out.println("int detected");
+                        i=1;
+                    }
+                }
+            }   
+        }
+        return i;
+    }
+    static int DatatypeChar(String r){
+        int c=0, j=r.length();
+        for(int a=0; a<j; a++)
+        {
+            if(r.charAt(a)=='c')
+            {
+                if(r.charAt(a+1)=='h')
+                {
+                    if(r.charAt(a+2)=='a')
+                    {
+                        if(r.charAt(a+3)=='r')
+                        {
+                            System.out.println("char detected");
+                            c=1;
+                        }
+                    }
+                }
+            }    
+        }
+        return c;
+    }
+    static int DatatypeString(String l){
+        int b=0, j=l.length();
+        for(int a=0; a<j; a++)
+        {
+            //if(l.matches())
+            if(l.charAt(a)=='s')
+            {
+                if(l.charAt(a+1)=='t')
+                {
+                    if(l.charAt(a+2)=='r')
+                    {
+                        if(l.charAt(a+3)=='i')
+                        {
+                            if(l.charAt(a+4)=='n')
+                            {
+                                if(l.charAt(a+5)=='g')
+                                {
+                                    System.out.println("string detected");
+                                    b=1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }    
+        }
+        return b;
+    }
+    
+    
+    static int Semicolon(String x){
+        int i=0, j = x.length();
+        //String[] arr = x.split(" ");  
+        if(x.charAt(0)=='i'&&x.charAt(1)=='f'||x.charAt(0)=='{'||x.charAt(0)=='}')
+        {
+            System.out.println("Its okay to miss a semi");
+            i = 0;
+        }
+        else if(x.charAt(j-1)==';'){
+            System.out.println("Semicolon detected");
+            i=0;
+        }
+        else{
+            System.out.println("There is no semicolon");
+            i = 1;
+        }
+        return i;
+    }
 }
