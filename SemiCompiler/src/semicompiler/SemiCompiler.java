@@ -6,6 +6,7 @@
 package semicompiler;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,7 +29,13 @@ public class SemiCompiler {
         Scanner sc = new Scanner(new FileReader("input.txt"));
         
         Scanner scan = new Scanner(new FileReader("input.txt"));
-
+        
+        File file = new File("input.txt");
+        FileInputStream fis = new FileInputStream(file);
+        byte[] data = new byte[(int) file.length()];
+        fis.read(data);
+        fis.close();
+        
         //reads the file "input.txt"
         PrintWriter writer = new PrintWriter("Test.java", "UTF-8");
         int parctr = 0, bractr = 0, lineerror = 1;
@@ -36,11 +43,15 @@ public class SemiCompiler {
         
         while (sc.hasNext()) {
             String str = sc.nextLine();
-//                Space(str);
-//                DatatypeInt(str);
-//                DatatypeChar(str);
-//                DatatypeString(str);
-//                Semicolon(str);
+            
+            DatatypeInt(str);
+            DatatypeChar(str);
+            DatatypeString(str);
+            DatatypeFloat(str);
+            DatatypeDouble(str);
+            Space(str);
+            Semicolon(str);
+            DatatypeLine(str);
             
             if(str.contains("(")){
                 parctr++;
@@ -150,102 +161,80 @@ public class SemiCompiler {
         {
             if(x.charAt(a)==' ')
             {
-                if(x.charAt(a+1)==' ')
-                {
-                    System.out.println("White space detected");
-                    i=1;
-                }
-            }
-            
-        }
-        return i;
-    }
-    
-    static int DatatypeInt(String r){
-        int i=0, j = r.length();
-        for(int a = 0;a<j;a++)
-        {
-            if(r.charAt(a)=='i')
-            {
-                if(r.charAt(a+1)=='n')
-                {
-                    if(r.charAt(a+2)=='t')
-                    {
-                        System.out.println("int detected");
-                        i=1;
-                    }
-                }
+                System.out.println("White space detected");
+                i=1;
             }   
         }
-        return i;
+    return i;
     }
-    static int DatatypeChar(String r){
-        int c=0, j=r.length();
-        for(int a=0; a<j; a++)
-        {
-            if(r.charAt(a)=='c')
-            {
-                if(r.charAt(a+1)=='h')
-                {
-                    if(r.charAt(a+2)=='a')
-                    {
-                        if(r.charAt(a+3)=='r')
-                        {
-                            System.out.println("char detected");
-                            c=1;
-                        }
-                    }
-                }
-            }    
+    static int DatatypeLine (String r) {
+        String dNewline = new String ("");
+        if (r.matches("")) {
+            System.out.println("NEW LINE");
         }
-        return c;
+        else {
+            System.out.println("NO NEW LINE");
+        }
+        return 1;
     }
-    static int DatatypeString(String l){
-        int b=0, j=l.length();
-        for(int a=0; a<j; a++)
-        {
-            //if(l.matches())
-            if(l.charAt(a)=='s')
-            {
-                if(l.charAt(a+1)=='t')
-                {
-                    if(l.charAt(a+2)=='r')
-                    {
-                        if(l.charAt(a+3)=='i')
-                        {
-                            if(l.charAt(a+4)=='n')
-                            {
-                                if(l.charAt(a+5)=='g')
-                                {
-                                    System.out.println("string detected");
-                                    b=1;
-                                }
-                            }
-                        }
-                    }
-                }
-            }    
+    static int DatatypeInt (String r) {
+        String dInt = new String ("int");
+        if (r.matches("(.*)int(.*)")) {
+            System.out.println("int detected");
         }
-        return b;
+        else {
+            System.out.println("no int datatype detected");
+        }
+        return 1;
     }
-    
-    
-    static int Semicolon(String x){
-        int i=0, j = x.length();
-        //String[] arr = x.split(" ");  
-        if(x.charAt(0)=='i'&&x.charAt(1)=='f'||x.charAt(0)=='{'||x.charAt(0)=='}')
-        {
-            System.out.println("Its okay to miss a semi");
-            i = 0;
+    static int DatatypeChar(String r) {
+        String dChar = new String ("char");
+        if (r.matches("(.*)char(.*)")) {
+            System.out.println("char detected");
         }
-        else if(x.charAt(j-1)==';'){
-            System.out.println("Semicolon detected");
-            i=0;
+        else {
+            System.out.println("no char datatype detected");
         }
-        else{
-            System.out.println("There is no semicolon");
-            i = 1;
+        return 1;
+    }
+    static int DatatypeString(String l) {
+        String dString = new String ("string");
+        if (l.matches("(.*)string(.*)")) {
+            System.out.println("string detected");
         }
-        return i;
+        else {
+            System.out.println("no string datatype detected");
+        }
+        return 1;
+    }
+    static int DatatypeFloat(String l) {
+        String dFloat = new String ("float");
+        if (l.matches("(.*)float(.*)")) {
+            System.out.println("float detected");
+        }
+        else {
+            System.out.println("no float datatype detected");
+        }
+        return 1;
+    }
+    static int DatatypeDouble(String l) {
+        String dDouble = new String ("double");
+        if (l.matches("(.*)double(.*)")) {
+            System.out.println("double detected");
+        }
+        else {
+            System.out.println("no double datatype detected");
+        }
+        return 1;
+    }
+    static int Semicolon(String x) {
+        String dSemicolon = new String (";");
+        if (x.matches("(.*);(.*)")) {
+            System.out.println("; detected");
+        }
+        else {
+            System.out.println("no ; detected");
+        }
+        return 1;
     }
 }
